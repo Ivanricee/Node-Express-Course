@@ -15,6 +15,10 @@ Mientras que en Node.js no tenemos un DOM ni un objeto windows, lo que sí tenem
     debugger
     stream
     events
+------------------------ARQUITECTURA ORIENTADA A EVENTOS------
+emmiter.
 
-    ------------------------ARQUITECTURA ORIENTADA A EVENTOS------
+#########################    NODE-WEB    ###########################
+
+# strings tienen eventos
     
