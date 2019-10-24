@@ -21,4 +21,43 @@ emmiter.
 #########################    NODE-WEB    ###########################
 
 # strings tienen eventos
+
+######################### Readable y Writable streams ####################
+# es una coleccion de datos tal como son los array o cadenas de texto
+#sólo que estar en su totalidad se manejan por pedazos
+# de esta manera podemos manejar una gran coleccion de datos
+
+> streams/big-file.js
+
+-------------------------------------------------------------
+ Writable streams
+
+Los Readable y Writeable streams tienen los siguientes eventos y funciones respectivamente:
+Readable
+Eventos
+
+    data. Se dispara cuando recibe datos.
+    end. Se dispara cuando termina de recibir datos.
+    error. Se dispara cuando hay un error.
+
+Funciones
+
+    pipe
+    unpipe
+    read
+    push
+
+Writeable
+Eventos
+
+    drain. Se dispara cuando emite datos.
+    finish. Se dispara cuando termina de emitir.
+    error. Se dispara cuando hay un error.
+
+Funciones
+
+    write
+    end
+
+Recuerda que tienen estos eventos porque los heredan de la clase EventEmitter.
     
