@@ -77,3 +77,79 @@ En esta clase vemos dos módulos básicos:
 
 Los métodos contenidos en estos módulos (y en todo Node.js) funcionan de forma asíncrona por default, 
 pero también se pueden ejecutar de forma síncrona, por ejemplo el método readFile() tiene su versión 
+
+
+################   Consola, utilidades y debugging  #######################
+Carpeta del tema: utilidades-debugging
+El módulo útil esta diseñado para resolver las necesidades internas de las API de Node, sin embargo muchas de estas utilidades también son útiles para los módulos de las aplicaciones en desarrollo. Se puede acceder a estas utilidades usando:
+const util = require('util');
+
+util.format()
+El método util.format () devuelve una cadena formateada utilizando el primer argumento como una cadena de formato tipo printf que puede contener cero o más especificadores de formato. Cada especificador se reemplaza con el valor convertido del argumento correspondiente. Los especificadores compatibles son:
+
+    %s - String
+    %d - Number
+    %i - parseInt(value, 10)
+    %f - parseFloat(value)
+    %j - JSON
+    %o - Object
+    %c - Css
+    %% - signo de '%'
+    Inspector
+    cuando se inicia la inspección --inspect, Node escucha a un cliente de depuración , Por defecto escuchara el host y el puerto 127.0.0.1:9229 y a cada proceso se le asigna un id único.
+    Opciones de la línea de comandos
+    --inspect: Habilita el agente de inspección y escucha el puerto por defecto 127.0.0.1:9229
+    --inspect=[host:port]: Habilita el agente de inspección, vincula la dirección y el puerto a la dirección de inspección.
+
+
+################### Clusters y procesos hijos ###########################
+Una sola instancia de Node.js corre un solo hilo de ejecución. Para tomar ventaja de los sistemas con multiples core, necesitamos lanzar un cluster de procesos de Node.js para manejar la carga.
+
+El módulo cluster nos permite la creación fácil de procesos hijos que comparten el mismo puerto del servidor. Veamos un ejemplo en código:
+
+const cluster = require("cluster");
+const http = require("http");
+
+
+// Requerimos la cantidad de CPUs que tiene la maquina actual
+const numCPUs = require("os").cpus().length;
+
+
+if (cluster.isMaster) {
+  console.log(`Master ${process.pid} is running`);
+
+
+  // Si el cluster es maestro, creamos tantos procesos como numero de CPUS
+  for (let i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
+
+
+  // Si por alguna razón el cluster se finaliza hacemos un log
+  cluster.on("exit", (worker, code, signal) => {
+    console.log(`worker ${worker.process.pid} died`);
+  });
+} else {
+  // Los diferentes workers pueden compartir la conexión TCP
+  // En este caso es una servidor HTTP
+  http
+    .createServer((req, res) => {
+      res.writeHead(200);
+      res.end("hello world\n");
+    })
+    .listen(8000);
+
+
+  console.log(`Worker ${process.pid} started`);
+}
+
+Si corremos nuestro archivo de Node.js ahora compartirá el puerto 8000 con los diferentes workers:
+
+$ node server.js
+Master 3596 is running
+Worker 4324 started
+Worker 4520 started
+Worker 6056 started
+Worker 5644 started
+
+En Windows, todavía no es posible establecer un nombre de proceso server en un worker.
