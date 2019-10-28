@@ -1,0 +1,84 @@
+¿Qué es Express.js y para qué sirve?
+
+Express.js es un framework para crear Web Apps, Web APIs o cualquier tipo de Web Services, 
+es libre bajo la licencia MIT.
+
+Express es muy liviano y minimalista además de ser extensible a través 
+de Middlewares.
+
+Los Middlewares interceptan el request y el response para ejecutar una 
+acción en medio.
+
+Caracteristicas: 
+
+* minimalista
+* Template engines
+* Routing
+* Middlewares
+* Plugins (como middlewares)
+
+############ generando un proyecto en express ######################
+
+# primero necesitamos un package.json
+%%%%%% npm init -y
+
+# crea un archivo package.json,
+Lo modificamos para generar una buena bas con buenas practicas:
+
+"scripts":{
+    "dev": "DEBUG=app:* nodemon index",
+    "start": "NODE_ENV=production node index"
+}
+
+# creamos archivmo .eslintrc
+# creamos archivo .prettierrc.json
+# Ahora instalamos nuestras dependencias
+ # dotenv carga nuestras vaiables de entorno
+%%%%% npm i express dotenv
+%%%%% npm i -D nodemon eslint eslint-config-prettier eslint-plugin-prettier prettier
+# para que nuestro codigo haga el formateo automatico cada vez que se hace un commit
+  y se sube al repositorio instalamos un hook
+# Modifica automaticamente nuestro package.json
+  hacindo que cada vez que se haga commit toma todo el codigo y lo va a
+  formatear con la congfiruacion que hemos establecido en eslint-prettier
+  y lo va a subir al repositorio
+    "husky": {
+    "hooks": {
+      //antes de hacer un commit corre lint-staged
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      //corre slint con un fix y luego agrega todos nuestros archivos
+      "eslint --fix",
+      "git add"
+    ]
+  }
+%%%%% npx mrm lint-staged
+
+# Creamos un nuevo archivo de configuracion:
+config/index.js
+# levantamos el servidor en express
+index.js
+############################# fin ######################
+
+###################### Request y Response Objects ###################
+El objeto req (Request) en Express representa el llamado HTTP y tiene diferentes propiedades del llamado, como la cadena de texto query (Query params), los parámetros de la URL (URL params), el cuerpo (Body), los encabezados (HTTP headers), etc.
+
+Para acceder al req basta con acceder al primer parámetro de nuestros router handlers (router middleware) ó middleware.
+
+Como por ejemplo así lo hemos visto siempre:
+
+app.get("/user/:id", function(req, res) {
+  res.send("user " + req.params.id);
+});
+
+Pero también funcionaria sin problemas:
+
+app.get("/user/:id", function(request, response) {
+  response.send("user " + request.params.id);
+});
+
+https://developer.mozilla.org/es/docs/Web/HTTP/Methods/POST
+https://platzi.com/clases/1646-backend-nodejs/22027-request-y-response-objects/

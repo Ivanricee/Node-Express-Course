@@ -1,0 +1,19 @@
+
+> husky@3.0.9 install C:\xampp\htdocs\javascript\node\movies-api\node_modules\husky
+> node husky install
+
+husky > Setting up git hooks
+husky > Done
+
+> husky@3.0.9 postinstall C:\xampp\htdocs\javascript\node\movies-api\node_modules\husky
+> opencollective-postinstall || exit 0
+
+[96m[1mThank you for using husky![96m[1m
+[0m[96mIf you rely on this package, please consider supporting our open collective:[22m[39m
+> [94mhttps://opencollective.com/husky/donate[0m
+
++ husky@3.0.9
++ lint-staged@9.4.2
+added 149 packages from 111 contributors and audited 2887 packages in 11.694s
+found 0 vulnerabilities
+
