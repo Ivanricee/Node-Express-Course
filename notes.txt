@@ -61,3 +61,10 @@ Funciones
 
 Recuerda que tienen estos eventos porque los heredan de la clase EventEmitter.
     
+################## Duplex y Transforms streams ##############################
+
+Ambos sirven para simplificar nuestro código:
+
+    Duplex: implementa los métodos write y read a la vez.
+    Transform: es similar a Duplex pero con una sintaxis más corta.
+
