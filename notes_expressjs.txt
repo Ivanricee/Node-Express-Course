@@ -113,4 +113,26 @@ ya que no queremos que por error se puedan borrar todos nuestros datos.
   y asi generar el nuevo enrutamiento
 
 ##########################  Métodos idempotentes -------------------------------------
-uso basico de metodos get put post y delete
+uso basico de metodos get put post y delete y postman
+
+####################  Implementando una capa de servicios ----------------------------
+
+La arquitectura tradicional MVC se queda corta en aplicaciones modernas, 
+por eso necesitamos una arquitectura diferente cómo la Clean Arquitecture 
+que tiene una capa de servicios para manejar la lógica de negocio.
+
+# 1 controllers: middlewares y routers, se comunican con la api envian
+                 y reciben un json (los controladores solo llaman servicios)
+
+# 2 Services: el corazon de la app aqui esta toda la logica de nogocio
+              (los servicios pueden llamar otros servicios o librerias)
+
+# 3 librerias: esta capa esta adjunta a librerias externas ej: bases de datos
+               u otras api´s
+
+#### Aplicacion a nuestro proyecto
+# services:
+ # aqui vamos a mover nuestros mocks
+ # y tambien vamos a crear nustras rutas haciendo el llamado async de
+   de los datos 
+./services/movies.js               
