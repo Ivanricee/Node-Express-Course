@@ -4,18 +4,13 @@ const app = express()
 
 const { config } = require('./config/index');
 
-//usamos el metodo
-//luego la ruta
-// y luego recibe una fucnion que tiene el req obj y el res obj
-app.get('/', function(req,res){
-    //cuando entremos a esa ruta obtendremos este valor
-    res.send('hello world')
-});
+//importamos nuestra ruta 
+const moviesApi = require('./routes/movies.js')
 
-app.get('/json', function(req,res){
-    //cuando entremos a esa ruta obtendremos este json
-    res.json('hello world')
-});
+//recibe como paramentro una aplicacion de express
+//para generar el enrutamiento
+moviesApi(app)
+
 
 app.listen(config.port, function (){
     console.log(`Listening http://localhost:${config.port}`)

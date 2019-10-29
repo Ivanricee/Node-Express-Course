@@ -82,3 +82,35 @@ app.get("/user/:id", function(request, response) {
 
 https://developer.mozilla.org/es/docs/Web/HTTP/Methods/POST
 https://platzi.com/clases/1646-backend-nodejs/22027-request-y-response-objects/
+ 
+ 
+ 
+ ######################## Anatomía de una API Restful  ####################
+
+REST (Representational State Transfer) es un estilo de arquitectura para construir web services, 
+no es un estándar pero si una especificación muy usada.
+
+Las peticiones HTTP van acompañadas de un “verbo” que define el tipo de petición:
+
+    GET. Lectura de datos.
+    PUT. Reemplazar datos.
+    PATCH. Actualizar datos en un recurso específico.
+    POST. Creación de datos.
+    DELETE. Eliminación de datos.
+
+No es recomendable habilitar un endpoint de tipo PUT y DELETE para toda 
+nuestra colección de datos, sólo hacerlos para recursos específicos, 
+ya que no queremos que por error se puedan borrar todos nuestros datos.
+
+
+############################## CRUD en Express ##################################
+# para obtener datos de prueba usamops https://mockaroo.com/ para obtener un json
+
+# creamos nuestro archivo de rutas
+./routes/movies.js
+# modificamos el archivo index.js para importar las nuevas rutas
+  a traves de una funcion que recibe una aplicacion de express
+  y asi generar el nuevo enrutamiento
+
+##########################  Métodos idempotentes -------------------------------------
+uso basico de metodos get put post y delete
