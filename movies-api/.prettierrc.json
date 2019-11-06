@@ -1,0 +1,7 @@
+//es una utilidad que nos permite formatear nuestro codigo
+//al hacer commit de neustro codigo tiene que ser igual
+{
+    "tabWidth":2,
+    "semi": true,
+    "singleQuote": true
+}

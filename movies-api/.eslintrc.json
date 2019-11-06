@@ -1,0 +1,19 @@
+{
+    "parserOptions": {
+        //usa la version de javascript 2018 en adelante
+      "ecmaVersion": 2018
+    },
+    "extends": ["eslint:recommended", "prettier"],
+    "env": {
+        //usamos acma script 6
+      "es6": true,
+      //usamos variables de entorno de node
+      "node": true,
+      //usamos variables de entorno mocha
+      "mocha": true
+    },
+    "rules": { 
+        //No poner la consola en nuestro codigo no sera error sino un warning
+      "no-console": "warn"
+    }
+  }
