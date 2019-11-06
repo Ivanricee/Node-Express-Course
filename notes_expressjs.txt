@@ -135,4 +135,48 @@ que tiene una capa de servicios para manejar la lógica de negocio.
  # aqui vamos a mover nuestros mocks
  # y tambien vamos a crear nustras rutas haciendo el llamado async de
    de los datos 
-./services/movies.js               
+./services/movies.js       
+
+################## MONGO DB ATLAs ####################################
+
+# crear cuenta en mongo db ATLAs
+# crear un collection y una base de datos llamada movies
+# Instalar mongo db:
+  ##%%%% npm i mongodb
+# crear archivos de configuracion de mongo:
+# .env.example -> variables de entorno: para que cualquier otro desarrollador
+    sepa que variables de entorno debe alimentar localmente
+# .env: tiene variables de entorno y debe ser alimentada por el archivo de configuracion
+
+# Creamos capa de librerias lib/mongo.js
+
+######################  Conexión con Robot3T y MongoDB Compass a una BD  #################
+Robo 3T y MongoDB Compass son dos clientes con interfaz gráfica que nos permiten conectarnos 
+a nuestras instancias de Mongo DB y manipularlas de una manera más fáci
+
+######################  Implementación de las acciones de MongoDB  ########################
+
+Los métodos de MongoDB para implementar un CRUD son:
+https://docs.mongodb.com/manual/crud/
+https://github.com/uokesita/the-little-mongodb-book/blob/master/es/mongodb.markdown
+https://docs.mongodb.com/manual/reference/method/js-collection/
+
+    Create
+        insertOne
+    Read
+        find
+        findOne
+    Update
+        updateOne
+    Delete
+        deleteOne
+#################### Conexión de nuestros servicios con MongoDB ####################        
+modificar services/movies
+para quitar el codigo antiguo y establecer el CRUD de Mongo
+
+# por defecto express necesita parsear los datos  json
+# la manera de arreglarolo es agregando un middleware "body parser":
+# en nuestro archivo de conexion agregamos:
+./index
+  app.use(express.json())
+

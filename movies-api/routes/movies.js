@@ -21,7 +21,7 @@ function moviesApi(app) {
     //Una ruta recibe req, res y en este caso tambien la funcionalidad 
     //next(parte de la teoria middleware)
     router.get('/', async function (req, res, next) {
-        const {tags} = req.query
+        const { tags } = req.query
         try {
             //como el codigo es un array debomos envolverlo en un promesa para
             //que podamos hacer uso de nuestro codigo asyn con nuestro
@@ -41,9 +41,9 @@ function moviesApi(app) {
     })
     //obtiene una pelicula en especifico
     router.get('/:movieId', async function (req, res, next) {
-        const {movieId} = req.params
+        const { movieId } = req.params
         try {
-            const movies = await moviesService.getMovie({movieId})
+            const movies = await moviesService.getMovie({ movieId })
             res.status(200).json({
                 data: movies,
                 message: 'movies retrieved'
@@ -54,9 +54,9 @@ function moviesApi(app) {
     })
     //crea una nueva pelicula
     router.post('/', async function (req, res, next) {
-        const {body:movie} = req
+        const { body: movie } = req
         try {
-            const createdMovieId = await moviesService.createMovie({movie})
+            const createdMovieId = await moviesService.createMovie({ movie })
             res.status(201).json({
                 data: createdMovieId,
                 message: 'movies created'
@@ -66,11 +66,11 @@ function moviesApi(app) {
         }
     })
     //actualizacion 
-    router.put('/:moveId', async function (req, res, next) {
-        const {movieId} = req.params
-        const {body:movie} = req
+    router.put('/:movieId', async function (req, res, next) {
+        const { movieId } = req.params
+        const { body: movie } = req
         try {
-            const updatedMovieId = await moviesService.updateMovie({movieId,movie})
+            const updatedMovieId = await moviesService.updateMovie({ movieId, movie })
             res.status(200).json({
                 data: updatedMovieId,
                 message: 'movie updated'
@@ -80,13 +80,14 @@ function moviesApi(app) {
         }
     })
     //deleted
-    router.delete('/:moveId', async function (req, res, next) {
-        const {movieId} = req.params
+    router.delete('/:movieId', async function (req, res, next) {
+        const { movieId } = req.params
+
         try {
-            const deletedMovieId = await moviesService.deleteMovie({movieId})
+            const deletedMovieId = await moviesService.deleteMovie({ movieId })
             res.status(200).json({
                 data: deletedMovieId,
-                message: 'movie deleted'
+                message: 'movie deleted',
             })
         } catch (err) {
             next(err)
