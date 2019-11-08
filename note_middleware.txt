@@ -1,0 +1,73 @@
+# Es una pieza de software que entre otras dos
+
+# En express especificamente la manera en la que funcionan los middlewares
+es mediante la firma req object, res object y la funcionalidad next()
+
+# La forma en como express sabe que es un middleware es cuando tiene la funcion next()
+
+en el middleware podemos hacer culquier cosa como modificar req y ores object
+y la manera de como ejecutamos el siguiente middleware es con next()
+
+
+function (req,res,next){
+    next()
+}
+# al momento de poner un parametro en next(); este arroja los middleware de error
+# Los middleware en next de formato error tienen una firma diferente
+  en vez de recibir 3 parametros reciben 4 que será el error
+
+  function errorHandler(err, req, res, next){
+      res.status(err.status || 500)
+      res.json( { error:err } )
+  }
+
+  ############################# COMO USARLO ##############################
+
+  utils/middleware/errorHandler.js
+
+  ################ Manejo de errores asíncronos y síncronos en Express  #######
+
+https://expressjs.com/en/guide/error-handling.html
+
+############### Capa de validación de datos usando un middleware #################
+
+//es necesaria cuando se consumen nuestros endpoints; estos no saben que datos
+//les estamos enviando en que formato
+//entonces podemos validar el tipo de dato o si tiene o no datos
+
+//esto con la finalidad de que neustro cliente sepa como consuimior nuestro api
+
+middleware/validationHandler.js   
+
+
+############################# JOI y BOOM ###########################
+son tecnologias del ecosistema happy js
+las cuales integraremos como middleware en express
+
+JOI -> nos ayudara a validar los esquemas
+BOOM -> maneja los errores de una manera mucho mas comprensible
+
+
+################## implementando boom ---------------------------------
+# usaremos boom en nuestros error handles que usamos con anterioridad
+
+%%%% npm i @hapi/boom
+
+modificamos utils/middleware/errorhandler.js
+
+y le añadimos el nuevo middleware boom a index.js
+
+tambien en validationHandler.js
+
+##################   implementando JOI ----------------------------
+
+%%%%%% npm install --save @hapi/joi@15.0.3
+
+# modificar funcion para validar el sschema con joi
+  utils/moddleware/validationHandler.js
+
+# creamos esquema para los datos
+ utils/schemas/movies
+
+# lo integramos en las rutas que pasan por los servicios para llamar
+a los datos de mongo db
