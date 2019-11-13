@@ -1,0 +1,34 @@
+# test para nuestros endpoint
+# dash dev -> es para modo desarrollo
+# los test no se corren cuando estemos en produccion
+# mocha nos ayuda a correr los test
+# supertest -> ayuda  a levantar un servidor temporal
+# sinen es una utilidad que ayuda a crear mocks para test
+# proxyquire es una utilidad que ayuda a inyectrar los mocks cuando requeramos los paquetes
+
+%%%%%%% nom -i -D mocha supertest sinon proxyquire
+
+# modificamos los mocks para agregar utilidad
+
+utils/mocks/movies.js
+
+# crear test server:
+# es un erver que su unica mision sera levantar un server para pruebas
+# corren independiente a un server original
+utils*testServer.js
+
+# creamos test en test/routes.movies.test.js
+# configuramos un script donde podamos correr los test
+  en nuestro package.json
+
+# con la configuracion y naming correcto de nuestros archivos
+  mocha deberia ser capaz de correr perfectamente
+    "test": "mocha --exit"
+######################### Test a los servicios ---------------------------
+
+
+
+
+############################ CAPA DE MANEJO DE CACHE ##################
+//CREAR RCHIVO
+utils/time.js

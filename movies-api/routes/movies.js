@@ -7,6 +7,19 @@ const {
 } = require('../utils/schemas/movies.js')
 
 const validationHandler = require('../utils/middleware/validationHandler')
+
+
+//#####################-----------CACHE-
+//primero traemos la utilidad
+const cacheResponse = require('../utils/cacheResponse')
+
+const { FIVE_MINUTES_IN_SECONDS,SIXTY_MINUTES_IN_SECONDS  } = require('../utils/time')
+
+//#####################------------------------
+
+
+
+
 //creamos una funcion que reciba una aplicacion de express
 //nos permite ser dinamicos y tener control sobre 
 //que aplicacion va a consumir nuestra ruta
@@ -26,6 +39,17 @@ function moviesApi(app) {
     //Una ruta recibe req, res y en este caso tambien la funcionalidad 
     //next(parte de la teoria middleware)
     router.get('/', async function (req, res, next) {
+
+        //############## Agregamos cache
+        //el iempo se declara en las regalas del negocio
+        cacheResponse(res,FIVE_MINUTES_IN_SECONDS)
+
+        //###############
+
+
+
+
+
         const { tags } = req.query
         try {
             //como el codigo es un array debomos envolverlo en un promesa para
@@ -46,6 +70,10 @@ function moviesApi(app) {
     })
     //obtiene una pelicula en especifico
     router.get('/:movieId', validationHandler({ movieId: movieIdSchema }, 'params'), async function (req, res, next) {
+        
+        //############## Agregamos cache
+        cacheResponse(res,SIXTY_MINUTES_IN_SECONDS)
+        //###############
         const { movieId } = req.params
         try {
             const movies = await moviesService.getMovie({ movieId })
