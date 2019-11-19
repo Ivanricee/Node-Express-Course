@@ -5,6 +5,7 @@ const { config } = require('./config/index');
 
 //importamos nuestra ruta 
 const moviesApi = require('./routes/movies.js')
+const userMoviesApi = require('./routes/userMovies.js')
 const { logErrors, errorHandler, wrapErrors }= require('./utils/middleware/errorHandler.js')
 const notFoundHandler = require('./utils/middleware/notFoundHandler.js')
 //le permite a nuestras rutas, cuando le enviemos datos en formato json,
@@ -17,6 +18,7 @@ app.use(express.json())
 //recibe como paramentro una aplicacion de express
 //para generar el enrutamiento
 moviesApi(app)
+userMoviesApi(app)
 
 //capturar error 404
 app.use(notFoundHandler)

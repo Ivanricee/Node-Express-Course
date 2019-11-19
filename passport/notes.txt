@@ -1,0 +1,33 @@
+######################  Agregando la colección de usuarios ########################
+
+# Agregamso un nuevo schema para validar al usuario
+ &  utils/schemas/users.js
+
+# Creamos un nuevo servicio  (aqui van las reglas de negocio del usuario)
+  Este nos permite obtener y crear usuarios de la base de datos
+services/users.js
+ 
+%%%%%%%%% npm i bcrypt
+
+################ Creamos collection de las peliculas del ususario ########################
+  # schema
+  # ruta
+  # y el servicio de las peliculas del usuario
+
+# esto permitira que cuando un usuario de autentique y agregue una pelicula
+# a su lista  lo pueda ver reflejado en la aplicacion
+
+# SCHEMA: permite cuando hagamos un llamo a nuestros endpoints podamos tener el formato correcto
+  schemas/userMovies
+
+# Service: crear crud para movies de usuarios 
+ services/userMovies.js
+
+ # ROUTE: Implementar Ruta que le da manjejo al schema y sersvicio que creamos
+ routes/userMovies.js
+
+ ############# Implementando el POST y DELETE de las películas de usuariO ##############
+ seguimos trabajando en 
+ routes/userMovies.js
+ para poder usar la ruta
+ abrimos index.js
