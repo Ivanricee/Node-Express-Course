@@ -1,4 +1,6 @@
 ######################  Agregando la colección de usuarios ########################
+Estoy agregando un crud en el proyecto de express para integrara
+el middleware passport.
 
 # Agregamso un nuevo schema para validar al usuario
  &  utils/schemas/users.js
@@ -31,3 +33,55 @@ services/users.js
  routes/userMovies.js
  para poder usar la ruta
  abrimos index.js
+
+ ###################  Configuración de Passport.js    ######################
+
+Passport.js es un middleware para express que nos permite 
+implementar estrategias de autenticación de una manera rápida y simple.
+
+%%%%%%% npm i passport jsonwebtoken passport-http passport-jwt
+# Pinta colores en la terminal
+%%%%%%% npm i -D chalk
+
+############## Agregamos varianbles de entorno ------------
+son necesarias para acuando estemos insertando nuestros usuarios iniciales
+no estemos definiendo un password defecto, sino un password diferente
+para cada aplicacion que estemos creando
+
+# en este caso generare un password por defect opara elñ admin y otro
+para admins iniciales
+.env
+
+# necesitamos el secret de nuestro jason webtoken
+# ESTE LO DEBERIAMOS SACAR DE UNA PAGINA LLAMADA KEYGEN
+
+# Api keys
+# nos permite definir cuando haya un login con alguno de nuestros clientes
+es decir del server o cliente adminsitrativo
+le otorgue el permiso
+en este casosera aleatoria mente atraves de nuestros scripts
+
+agragamos las variables en el archivo config/index.js
+
+
+############### Implementación de BasicStrategy con Passport.js ##############
+Passport.js es un middleware para express que nos permite implementar 
+estrategias de autenticación de una manera rápida y simple.
+
+# vamos aimplementar nuestra estrategia de tipo
+
+&&&&& auth/strategies/basic.js
+
+##############   Implementación de nuestro Sign-in  ###################
+
+Ahora vamso aimplementar la rua de sign in
+# haremos nuestro servicio:
+&&&&& services/apiKeys.js
+
+# haremos nuestra ruta:
+&&&&&
+ routes/auth.js
+
+ # implementamos la ruta en nuestro archivo index
+
+ index.js

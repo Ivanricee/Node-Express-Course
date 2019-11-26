@@ -3,7 +3,7 @@ const MongoLib = require('../lib/mongo')
 const bcrypt = require('bcrypt')
 
 //crear la clase 
-class usersService {
+class UsersService {
     constructor(){
         //DEfinimos la collection de datos 
         this.collection = 'users'
@@ -32,4 +32,4 @@ class usersService {
 
 }
 
-module.exports = usersService
+module.exports = UsersService
