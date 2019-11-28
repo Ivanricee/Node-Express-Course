@@ -1,0 +1,3 @@
+################### Configuración del server render #####################
+En esta parte del curso vamos a explorar el proyecto de server side render, 
+que trabajaremos en las siguientes clases.
