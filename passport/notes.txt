@@ -79,9 +79,41 @@ Ahora vamso aimplementar la rua de sign in
 &&&&& services/apiKeys.js
 
 # haremos nuestra ruta:
-&&&&&
- routes/auth.js
+ &&&&& routes/auth.js
 
  # implementamos la ruta en nuestro archivo index
 
  index.js
+
+ ################## Implementación de nuestro Sign-up #####################
+ seguimos trajanado sobre 
+ &&&&& routes/auth.js
+
+ ################## Protegiendo nuestras rutas con Passport.js ##############
+ # protejeremos las ruas de movies u user movies
+ # para ello debemos importtar nuestra estrategia de jwt, es decir
+   nuestra estrategia de jsonwebtoken
+   en &&&&&& routes/movies.js y routes/userMovies.js
+
+
+################## Implementando recordar sesión #########################
+Generalmente cuando queremos implementar la opción de recordar sesión para Express 
+mediante passport, lo que hacemos es extender la expiración de la Cookie.
+
+En nuestra ruta de sign-in de nuestro render server hacemos las siguientes modificaciones:
+
+modificamos la ruta de sign in en el archivo routes/auth
+
+################### Middleware para el manejo de scopes ###############
+
+# se encarga de validar en  nuestras rutos los scopes (read, create, update, delete permisions)
+utils/mideware/scopesValidationHandler.js
+
+# lo implementamos en
+routes/movies.js
+routes/userMovies.js
+
+################### Configuración del server render #####################
+
+En esta parte del curso vamos a explorar el proyecto de server side render, 
+que trabajaremos en las siguientes clases.

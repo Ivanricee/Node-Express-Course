@@ -8,7 +8,10 @@ const {
 
 const validationHandler = require('../utils/middleware/validationHandler')
 
+// #################   middleware validation scopes #####################
+const scopesValidationHandler = require('../utils/middleware/scopesValidationHandler')
 
+// ########################################################################
 //#####################-----------CACHE-
 //primero traemos la utilidad
 const cacheResponse = require('../utils/cacheResponse')
@@ -17,7 +20,13 @@ const { FIVE_MINUTES_IN_SECONDS,SIXTY_MINUTES_IN_SECONDS  } = require('../utils/
 
 //#####################------------------------
 
-
+// ################---  agregar seguridad a la ruta
+// Poteccion de nuestras url con el middleware passport
+// La unica manera de acceder a nuestras rutas es si nuestro jsonwebtoken es valido
+// # a traves de strategy de jwt
+const passport = require('passport')
+require("../utils/auth/strategies/jwt")
+// ################--
 
 
 //creamos una funcion que reciba una aplicacion de express
@@ -38,17 +47,25 @@ function moviesApi(app) {
     //reservada async y usamos try catch
     //Una ruta recibe req, res y en este caso tambien la funcionalidad 
     //next(parte de la teoria middleware)
-    router.get('/', async function (req, res, next) {
+    // #####################   passport middleware
+    // # hacemos uso de passport y hacemos passport.authenticate()
+    //   y en el definimos la estrategia ''jwt y definimos la session como false
+    // ##############################
+
+    //###################### scopes middleware
+    //Despues de verificar que esta autenticado con un jwt
+    //entonces incluimos el scope necesario
+    //################################################
+    router.get('/',     
+    passport.authenticate('jwt', {session: false}), 
+    scopesValidationHandler(['read:movies']),
+    async function (req, res, next) {
 
         //############## Agregamos cache
         //el iempo se declara en las regalas del negocio
         cacheResponse(res,FIVE_MINUTES_IN_SECONDS)
 
         //###############
-
-
-
-
 
         const { tags } = req.query
         try {
@@ -69,7 +86,10 @@ function moviesApi(app) {
         }
     })
     //obtiene una pelicula en especifico
-    router.get('/:movieId', validationHandler({ movieId: movieIdSchema }, 'params'), async function (req, res, next) {
+    router.get('/:movieId', 
+    passport.authenticate('jwt', {session: false}), 
+    scopesValidationHandler(['read:movies']),
+    validationHandler({ movieId: movieIdSchema }, 'params'), async function (req, res, next) {
         
         //############## Agregamos cache
         cacheResponse(res,SIXTY_MINUTES_IN_SECONDS)
@@ -86,7 +106,10 @@ function moviesApi(app) {
         }
     })
     //crea una nueva pelicula
-    router.post('/', validationHandler(createMovieSchema), async function (req, res, next) {
+    router.post('/',  
+    passport.authenticate('jwt', {session: false}) ,
+    scopesValidationHandler(['create:movies']),
+    validationHandler(createMovieSchema), async function (req, res, next) {
         const { body: movie } = req
         try {
             const createdMovieId = await moviesService.createMovie({ movie })
@@ -99,7 +122,10 @@ function moviesApi(app) {
         }
     })
     //actualizacion 
-    router.put('/:movieId', validationHandler(updatedMovieId), validationHandler({ movieId: movieIdSchema }, 'params'), async function (req, res, next) {
+    router.put('/:movieId',  
+    passport.authenticate('jwt', {session: false}),
+    scopesValidationHandler(['update:movies']),
+    validationHandler(updatedMovieId), validationHandler({ movieId: movieIdSchema }, 'params'), async function (req, res, next) {
         const { movieId } = req.params
         const { body: movie } = req
         try {
@@ -113,7 +139,10 @@ function moviesApi(app) {
         }
     })
     //deleted
-    router.delete('/:movieId', validationHandler({ movieId: movieIdSchema }, 'params'), async function (req, res, next) {
+    router.delete('/:movieId',     
+    passport.authenticate('jwt', {session: false}) , 
+    scopesValidationHandler(['deleted:movies']),
+    validationHandler({ movieId: movieIdSchema }, 'params'), async function (req, res, next) {
         const { movieId } = req.params
 
         try {
