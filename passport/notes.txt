@@ -1,3 +1,16 @@
+Authorization Basic: Se utiliza un usuario y contraseña y se usa generalmente 
+para el primer acceso a un sistema sign-in y este tipo de autorización nos 
+puede devolver un JSON WEB TOKEN.
+
+Authorization Bearer: Se utiliza un JWT con el cual el sistema valida nuestra 
+identidad y los niveles de autorización que tenemos dentro del sistema, estos 
+datos se ponen el el payload del JWT.
+
+Como lo entendí estos dos tipos de autorización funcionan bien juntos, 
+primero utilizas Basic para obtener tu token y después utilizas el token 
+para no depender de una sesión del lado del servidor y poder manejar las 
+rutas y los accesos con el token.
+
 ######################  Agregando la colección de usuarios ########################
 Estoy agregando un crud en el proyecto de express para integrara
 el middleware passport.

@@ -1,5 +1,9 @@
 const express = require("express");
-
+const passport = require('passport')
+const boom = require('@hapi/boom')
+const cookieParser = require('cookie-parser')
+//nos permite hacer un reques a la api
+const axios = require('axios')
 const { config } = require("./config");
 
 const app = express();
@@ -9,16 +13,58 @@ const app = express();
 //el token usado en el sign-in se inyectara en una cookie
 //las demas rutas simplemente llamarn el token de esa cookie
 //En una SPA se tiene muy seguro el sitio
+
+//middlewares
 // body parser
 app.use(express.json());
+app.use(cookieParser())
+
+
+// Basic satrategy
+require('./utils/auth/strategies/basic')
 
 app.post("/auth/sign-in", async function(req, res, next) {
-  
+  //custom callback
+  passport.authenticate("basic",function(error,data){
+    try{
+      if(error || !data){
+        next(boom.unauthorized)
+      }
+      req.login(data, {session:false}, async function(error){
+        if(error){
+          next(error)
+        }
+        //definir una cookie en nuestro objeto res
+        res.cookie("token", token, {
+          httpOnly: !config.dev,
+          secure: !config.dev
+        })
+        //devolvemos el usuario
+        //crea la cookie y ahi insertamos el token,
+        //tambien como respuesta devuelve el usuario
+        //asi la SPA puede obtner la informacion del usuario y mostrarla
+        //y apartir de aqui cada request tendra el token en la cookie
+        res.status(200).json(user)
+      })
+    }catch(error){
+      next(error)
+    }
+  })(req,res,next)
 
 });
 
 app.post("/auth/sign-up", async function(req, res, next) {
-
+  const {body:user}= req
+  try{
+    await axios({
+      url: `${config.apiUrl}/api/auth/sign-up`,
+      method: "post",
+      data: user
+    })
+    res.status(201).json({message: "user createded"})
+  }catch(error){
+    next(error)
+  }
 });
 
 app.get("/movies", async function(req, res, next) {

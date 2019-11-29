@@ -1,3 +1,20 @@
 ################### Configuración del server render #####################
 En esta parte del curso vamos a explorar el proyecto de server side render, 
 que trabajaremos en las siguientes clases.
+
+####################   Comunicación máquina a máquina  ####################
+utils/auth/strategies/basic.js
+
+Implementación de las rutas de las películas de usuario
+
+Felicidades por haber terminado este módulo, en el cual aprendimos:
+
+    Configuración de nuestro proyecto
+    Configuración de Passport.js
+    Implementación de estrategias en Passport.js
+    Implementación de nuestro Sign-in y Sign-up
+    Protegiendo nuestras rutas con Passport.js
+    Implementando recordar sesión
+    Comunicación máquina a máquina
+
+Sigue adelante, ya nos falta poco para terminar.
