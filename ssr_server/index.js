@@ -34,6 +34,7 @@ app.post("/auth/sign-in", async function(req, res, next) {
         if(error){
           next(error)
         }
+        const {token, ...user} = data;
         //definir una cookie en nuestro objeto res
         res.cookie("token", token, {
           httpOnly: !config.dev,
@@ -67,16 +68,56 @@ app.post("/auth/sign-up", async function(req, res, next) {
   }
 });
 
+
+//en el curso de backend con front end
 app.get("/movies", async function(req, res, next) {
 
 });
 //cuando el usuario en la interfaz grafica agregue o elimine peliculas de su lista
 app.post("/user-movies", async function(req, res, next) {
+try{
+  const {body: userMovie} = req
+  //la cookie esta guardada en las cookies y esta se encuentra en el request obj
+  const {token} = req.cookies;
+  const {data, status} = await axios({
+    //la url es de nuestro api server
+    url: `${config.apiUrl}/api/user-movies`,
+    //nuestra estrategia jwt es tipo bearer token
+    headers: {Authorization: `Bearer ${token}`},
+    method: 'post',
+    data: userMovie
+  })
+  if(status !== 201){
+    return next(boom.badImplementation)
+  }
 
+  res.status(201).json(data)
+}catch(error){
+  next(error)
+}
 });
 
 app.delete("/user-movies/:userMovieId", async function(req, res, next) {
-
+  try{
+    //en vez de recibir del cuerpo el user movie lo recibimos de la url
+    const {userMovieId} = req.params
+    //la cookie esta guardada en las cookies y esta se encuentra en el request obj
+    const {token} = req.cookies;
+    const {data, status} = await axios({
+      //la url es de nuestro api server
+      url: `${config.apiUrl}/api/user-movies/${userMovieId}`,
+      //nuestra estrategia jwt es tipo bearer token
+      headers: {Authorization: `Bearer ${token}`},
+      method: 'delete'
+    })
+    if(status !== 200){
+      return next(boom.badImplementation)
+    }
+  
+    res.status(200).json(data)
+  }catch(error){
+    next(error)
+  }
 });
 
 app.listen(config.port, function() {
