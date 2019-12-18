@@ -1,0 +1,70 @@
+################ Implementando 0Auth2.0 con Google  #####################
+
+creamos una nuevo proyecto en google y generamos un oauth con google.
+
+Instalamos:
+npm i passport-oauth
+
+VAmos a determinar nuestra estrategia de oauth con google,
+creamos el archivo oauth.js en
+
+ssr_server/auth/strategies/oauth.js
+
+en el index.js
+Agregamos nuestra nueva estrategia
+y implementar los nuevos endpoints
+
+############### Implementando Sign Provider en nuestra API #############
+
+implementamos nuetra ruta par que cualquier provedor tercer como por ejemplo
+la autenticacion con google pueda hacer uso de nuestra api
+
+en nuestra api, creamos un nuevo metodo llamado:  async getOrCreateUser
+movies-api/services/users
+
+modificamos un poco
+movies-api/utils/schema/users
+
+Ahora vamos a nuestra ruta de auth y creamos una nueva ruta post
+router.post('sign-provider)
+movies-api/routes/auth.js
+
+############## Seguridad con Helmet y npm audit ######################
+
+En esta clase aprenderemos a ponerle seguridad a nuestra aplicación.
+
+Helmet es un middleware que nos sirve para darle seguridad a las headers de 
+nuestra aplicación.
+
+Lo podremos utilizar de la siguiente manera con la configuración por defecto:
+
+const express = require('express')
+const helmet = require('helmet')
+
+const app = express()
+
+app.use(helmet())
+
+También aprenderemos a utilizar npm audit para ver cuales son las 
+vulnerabilidades de nuestra aplicación
+
+instalamos
+%%%%%%% npm i helmet
+
+########### NPM AUDIT ########################
+SE va por nuewstras dependencias e identifiva si hay vulnerabilidades desconocidas
+
+instalamos
+%%%%%% npm audit
+
+############## Que és OWASP y buenas prácticas de seguridad #################
+
+OWASP son las siglas de Open Web Application Security Project, una organización 
+que cuida las buenas prácticas de seguridad en las aplicaciones.
+
+Buenas prácticas:
+    Usa un gestor de contraseñas
+    Usa multi-factor auth
+    IRL security
+    Mantén actualizadas tus aplicaciones y SO
+    Mantente informado

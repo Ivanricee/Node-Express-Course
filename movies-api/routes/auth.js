@@ -7,7 +7,7 @@ const ApiKeysService = require('../services/apiKeys')
 //#sign up
 const UsersService = require('../services/users')
 const validationHandler = require('../utils/middleware/validationHandler')
-const {createUserSchema} = require('../utils/schemas/users')
+const {createUserSchema, createProviderUserSchema} = require('../utils/schemas/users')
 //# fin de importaciones de sign up 
 
 const { config } = require('../config');
@@ -93,7 +93,51 @@ function authApi(app) {
             next(error)
         }
     })
+    //esta ruta la usaremos con nuestros provedores terceros
+    router.post(
+        '/sign-provider',
+        validationHandler(createProviderUserSchema),
+        async function(req, res, next) {
+          const { body } = req;
+    
+          const { apiKeyToken, ...user } = body;
+            //para poder realizar cualqueir tarea externa es necesario que
+            //tenga una apikeyToken
+            if (!apiKeyToken) {
+                next(boom.unauthorized('apiKeyToken is required'));
+              }
+        
+              try {
+                //al google aauth le pasamos el usuario que viene del cuerpo de
+                //la ruta, de esta manera puede crear la autorizacion google oauth
+                const queriedUser = await usersService.getOrCreateUser({ user });
+                //creamos el token pasandole el apiToken del cuerpode la url
+                //asi obtenemos los scopes necesarios (crud)
+                const apiKey = await apiKeysService.getApiKey({ token: apiKeyToken });
+                if (!apiKey) {
+                    next(boom.unauthorized());
+                  }
+                //si el apiKey se genero y existe:
+                //a partir de queriedUser vamos a construir nuestro payload
+                const { _id: id, name, email } = queriedUser;
+                //tendra como id, el iddel usuario
+                const payload = {
+                    sub: id,
+                    name,
+                    email,
+                    scopes: apiKey.scopes
+                  };
 
+                //ahora creamos nuestro JWT es parecido al de sign in
+                //solo que este es para el sign in de terceros
+                const token = jwt.sign(payload, config.authJwtSecret, {
+                    expiresIn: '15m'
+                  });
+                  return res.status(200).json({ token, user: { id, name, email } });
+                } catch (error) {
+                    next(error);
+                }
+    })
 }
 
 module.exports = authApi

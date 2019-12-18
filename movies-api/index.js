@@ -1,4 +1,5 @@
 const express = require('express')
+const helmet = require('helmet')
 const app = express()
 
 const { config } = require('./config/index');
@@ -19,6 +20,9 @@ const notFoundHandler = require('./utils/middleware/notFoundHandler.js')
 //este es un middleware "body parser"
 app.use(express.json())
 
+//cuando no se le pasan datos esta ejecutando los valores por defecto
+//si queremos pasarle  algo extra tendriamos que pasarle un archivo de cnfiguracion 
+app.use(helmet())
 
 
 //recibe como paramentro una aplicacion de express

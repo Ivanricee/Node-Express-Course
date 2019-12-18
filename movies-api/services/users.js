@@ -28,7 +28,17 @@ class UsersService {
 
         return createUserId
     }
-
+    async getOrCreateUser({ user }) {
+        //si no existe el usuario lo crea, pero si existe lo va a traer
+        //getUser funcion de la libreria de mongo
+        const queriedUser = await this.getUser({ email: user.email });
+        if (queriedUser) {
+            return queriedUser;
+          }
+        //si no existe el uaurio aqui lo crea
+        await this.createUser({ user });
+        return await this.getUser({ email: user.email });
+    }
 
 }
 
