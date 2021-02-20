@@ -14,3 +14,7 @@ server.on('request', (req,res) => {
 })
 
 server.listen(3001)
+
+// -------se ejecuta con un curl -------------
+
+//curl -l localhost:3000

@@ -23,7 +23,10 @@ app.use(express.json())
 //cuando no se le pasan datos esta ejecutando los valores por defecto
 //si queremos pasarle  algo extra tendriamos que pasarle un archivo de cnfiguracion 
 app.use(helmet())
-
+app.use(helmet.permittedCrossDomainPolicies())
+//Esta configuracion permite desconocer que servidor se esta usando
+app.disable('x-powered-by')
+  
 
 //recibe como paramentro una aplicacion de express
 //para generar el enrutamiento
@@ -34,12 +37,13 @@ authApi(app)
 moviesApi(app)
 userMoviesApi(app)
 
-//capturar error 404
+//middleware capturar error 404
 app.use(notFoundHandler)
 
 
 //los middlewares de error siempre tienen que ir al final de las rutas 
 //(las rutas tambien son middlewares)
+// las rutas al ser middlwares con next pueden llamar al siguiente middleware que es el de error
 app.use(logErrors)
 app.use(wrapErrors)
 app.use(errorHandler)

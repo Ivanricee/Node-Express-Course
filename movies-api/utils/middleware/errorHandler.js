@@ -3,8 +3,13 @@ const boom = require('@hapi/boom')
 //queremso que el error contenga el stack del error
 const {config} = require('../../config')
 
+//segun el tipo de error que llege next se encarga de ejecutar el siguiente
+//middleware en este orden:
+//1.- log errors
+//2.- wrapErrors
+//3.- errorHandler -> que termina arrojando el error en formato json
 
-//con boom ahora recibiremos otro tipo de error
+//2. con boom ahora recibiremos otro tipo de error
 //hacemso destructuring al error
 function withErrorStack(error, stack){
     if(config.dev){
@@ -14,13 +19,13 @@ function withErrorStack(error, stack){
 
 }
 
-//el middleware se encargara de manejar el error
+//3. el middleware se encargara de manejar el error
 function logErrors(err, req,res,next){
     console.log(`aja la baraja ${err}`)
     next(err)
 }
 
-// ------------------ boom function
+// 4 .------------------ boom function
 //es posible que en algun momento el error que llegue no sea de tipo boom 
 //con esta funcion nos aseguramos de que todos sean de tipo boom
 function wrapErrors(err,req,res,next){
@@ -32,7 +37,7 @@ function wrapErrors(err,req,res,next){
 
 }
 
-//middleware que nos ayuda a darle manejo al error
+//1.- middleware que nos ayuda a darle manejo al error
 //por defaul express imprime los errores en formato html
 //en esta ocasion lo necesitamos en formato json 
 //para eso creamos una funcionalidad de ayuda(no es un middleware)

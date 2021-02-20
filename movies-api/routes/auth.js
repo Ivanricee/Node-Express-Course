@@ -28,6 +28,7 @@ function authApi(app) {
     //callback de ruta
     router.post('/sign-in', async function (req, res, next) {
           // Obtenemos el atributo rememberMe desde el cuerpo del request
+          console.log('concha marico')
         const { rememberMe } = req.body;
         const { apiKeyToken } = req.body;
         if (!apiKeyToken) {
@@ -39,6 +40,7 @@ function authApi(app) {
                 if (error || !user) {
                     next(boom.unauthorized())
                 }
+                
                 req.login(user, { session: false }, async function (error) {
                     if (error) {
                         next(error)

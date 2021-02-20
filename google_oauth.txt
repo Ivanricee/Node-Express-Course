@@ -1,4 +1,11 @@
+¿Qué es OAuth 2.0 y OpenID Connect?
+
+OAuth 2.0 es un estándar de la industria que nos permite implementar autorización.
+
+OpenID Connect es una capa de autorización que funciona sobre OAuth con métodos ya construidos.
+
 ################ Implementando 0Auth2.0 con Google  #####################
+seguimos trabajando en ssr_server
 
 creamos una nuevo proyecto en google y generamos un oauth con google.
 

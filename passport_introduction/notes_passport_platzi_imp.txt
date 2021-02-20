@@ -1,0 +1,202 @@
+Authorization Basic: Se utiliza un usuario y contraseña y se usa generalmente 
+para el primer acceso a un sistema sign-in y este tipo de autorización nos 
+puede devolver un JSON WEB TOKEN.
+
+Authorization Bearer: Se utiliza un JWT con el cual el sistema valida nuestra 
+identidad y los niveles de autorización que tenemos dentro del sistema, estos 
+datos se ponen el el payload del JWT.
+
+Como lo entendí estos dos tipos de autorización funcionan bien juntos, 
+primero utilizas Basic para obtener tu token y después utilizas el token 
+para no depender de una sesión del lado del servidor y poder manejar las 
+rutas y los accesos con el token.
+
+######################  Agregando la colección de usuarios ########################
+Estoy agregando un crud en el proyecto de express para integrara
+el middleware passport.
+
+# Agregamso un nuevo schema para validar al usuario
+ &  utils/schemas/users.js
+
+# Creamos un nuevo servicio  (aqui van las reglas de negocio del usuario)
+  Este nos permite obtener y crear usuarios de la base de datos
+services/users.js
+ 
+%%%%%%%%% npm i bcrypt
+
+################ Creamos collection de las peliculas del ususario ########################
+# Esto es diferente a crear una pelicula.
+  Lo que hacemos aqui es crear una colection nueva de las peliculas favoritas
+  del usuario, asi cada vez que entre se cargaran estas eplculas.
+  lo unico que cargaremos seran el id del usuario y el id de la pelicula
+
+  # schema
+  # ruta
+  # y el servicio de las peliculas del usuario
+
+# esto permitira que cuando un usuario de autentique y agregue una pelicula
+# a su lista  lo pueda ver reflejado en la aplicacion
+
+# SCHEMA: permite cuando hagamos un llamo a nuestros endpoints podamos tener el formato correcto
+  de nuestras peliculas favoritas
+  schemas/userMovies
+
+# Service: crear crud para movies favoritas de usuarios 
+ services/userMovies.js
+
+ # ROUTE: Implementar Ruta que le da manjejo al schema y servicio que creamos
+ routes/userMovies.js
+
+ ############# Implementando el POST y DELETE de las películas de usuariO ##############
+ seguimos trabajando en 
+ routes/userMovies.js
+ para poder usar la ruta
+ abrimos index.js
+---------------------------------------------------------------------------------------------
+ ###################  Configuración de Passport.js    ######################
+---------------------------------------------------------------------------------------
+/*
+ Al momento de realizar un sign in en router/auth.js en el body de esa peticion ira un apiKeyToken
+ (que es el mismo que esta en la base de datos)
+ passport intercepta la peticion.
+ Realiza una autenticacion de tipo "basic" en la que ve si existe el email y password
+ y retorna el usuario sin el password.
+
+ una vez que obtenemos el usuario en router/auth.js
+ 
+ Hacemos el login, pero no generamos una sesion
+
+ obtenemos el apiKey, enviando el apiTokenKey que esta en el body.
+
+ ahora formamos un jsonwebtoken con informacion del usuario y scopes
+ que se encuentran dentro del apiKey, y asi le damos autorizacion
+ a la aplicacion
+
+*/
+
+
+
+Passport.js es un middleware para express que nos permite 
+implementar estrategias de autenticación de una manera rápida y simple.
+
+%%%%%%% npm i passport jsonwebtoken passport-http passport-jwt
+# Pinta colores en la terminal
+%%%%%%% npm i -D chalk
+
+############## Agregamos varianbles de entorno ------------
+son necesarias para acuando estemos insertando nuestros usuarios iniciales
+no estemos definiendo un password defecto, sino un password diferente
+para cada aplicacion que estemos creando
+
+# en este caso generare un password por defect opara elñ admin y otro
+para admins iniciales
+.env
+
+# necesitamos el secret de nuestro jason webtoken
+# ESTE LO DEBERIAMOS SACAR DE UNA PAGINA LLAMADA KEYGEN
+
+# Api keys
+# nos permite definir cuando haya un login con alguno de nuestros clientes
+es decir del server o cliente adminsitrativo
+le otorgue el permiso
+en este casosera aleatoria mente atraves de nuestros scripts
+
+agragamos las variables en el archivo config/index.js
+
+
+############### Implementación de BasicStrategy con Passport.js ##############
+
+Passport.js es un middleware para express que nos permite implementar 
+estrategias de autenticación de una manera rápida y simple. Para poder
+realizar una buena autenticacion,
+  # basic: necesita un emeail y contraseña, si retorna un usuario borramos la contraseña
+           y retornamos a usuario
+  # jwt: necesita un email si hay un usuario borra el password y retorna el usuario
+         con sus scopes de acceso
+
+# vamos aimplementar nuestra estrategia de tipo basic y jwt
+
+&&&&& auth/strategies/basic.js
+
+------------------------------------------------------------------------------
+##############   Implementación de nuestro Sign-in  ###################
+-----------------------------------------------------------------------------
+# nos permite a partir de un apiKeyToken obtener los scopes que es requerido
+  a la hora de hacer sign in para poder firmar el jsonwebtoken con los
+  scopes correspondientes de acuerdo al apiToken que nosotros enviemos
+
+Ahora vamso aimplementar la rua de sign in
+# haremos nuestro servicio:
+&&&&& services/apiKeys.js
+
+
+# Tenemos que asegurarnos que en nuestro post venga un atributo apiKeyToken
+  este es el token que le vamos a pasar al sign in (service/apiKeys)
+  para determinar que tipo de permisos vamos a firmar en el jsonwebtoken
+  que vamos a devolver
+# con passport.authenticate: se encarga de ubicar a nuestro usuario en nuestro req.user
+  en este caso no nos interesa que ubique el usuario que encuentra en la autenticacion "basic"
+  Solo nos interesa que nos devuelva un jsonwebtoken firmado
+# Una vez teniendo el apiKey entonces construimos nuestro jsonwebtoken
+
+# haremos nuestra ruta:
+ &&&&& routes/auth.js
+
+ # implementamos la ruta en nuestro archivo index
+ index.js
+---------------------------------------------------------------------------------
+ ################## Implementación de nuestro Sign-up #####################
+--------------------------------------------------------------------------------
+----  Crear usuario  -----
+
+# Validamos datos,
+# implementamos req, res
+# llamamos nuestro servicio de creacion de usuarios.
+# retornamos el id del nuevo usuario 
+
+
+ seguimos trajanado sobre 
+ &&&&& routes/auth.js
+--------------------------------------------------------------------------------------
+ ################## Protegiendo nuestras rutas con Passport.js ##############
+-----------------------------------------------------------------------------------
+ # protejeremos las ruas de movies u user movies
+ # para ello debemos importtar nuestra ESTRATEGIA JWT, es decir
+   nuestra estrategia de jsonwebtoken
+ # Agregarlo a cada ruta para que cada peticion deba ir de por
+   medio un jsonwebtocken
+ # 
+   en &&&&&& routes/movies.js y routes/userMovies.js
+
+
+################## Implementando recordar sesión #########################
+Generalmente cuando queremos implementar la opción de recordar sesión para Express 
+mediante passport, lo que hacemos es extender la expiración de la Cookie.
+
+En nuestra ruta de sign-in de nuestro render server hacemos las siguientes modificaciones:
+
+modificamos la ruta de sign in en el archivo routes/auth
+---------------------------------------------------------------------------
+################### Middleware para el manejo de scopes ###############
+---------------------------------------------------------------------
+# Una vez que estamos autirozados en la aplicacion, ya sea 
+  un usuario publico o administrativo, lo siguiente sera validar
+  a que rutas podra tener acceso.
+#Lo realizamos con un middleware, le enviamos el scope de la accion de 
+  la ruta al middleware, el middleware intercepta el request, con esto
+  obtiene sus scopes, lo busca y valida con el string que le enviamos.
+  si lo encuentra lo deja entrar de otra manera arrojara un error unauthorized
+
+# se encarga de validar en  nuestras rutos los scopes (read, create, update, delete permisions)
+utils/mideware/scopesValidationHandler.js
+
+# lo implementamos en
+routes/movies.js
+routes/userMovies.js
+
+################### Configuración del server render #####################
+En esta parte del curso vamos a explorar el proyecto de server side render, 
+que trabajaremos en las siguientes clases.
+
+ssr_server_note.txt
+

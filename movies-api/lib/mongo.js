@@ -2,7 +2,7 @@ const { MongoClient, ObjectId } = require('mongodb');
 //Archivo de configuracion porque de ahi vamos a contruir la URL
 const { config } = require('../config');
 
-//nos garantiza que poralguna razon hay caracteres especiales no 
+//encodeURIComponent nos garantiza que poralguna razon hay caracteres especiales no 
 //tengamos probelma al conetarlo
 const USER = encodeURIComponent(config.dbUser);
 const PASSWORD = encodeURIComponent(config.dbPassword);
@@ -22,8 +22,8 @@ class MongoLib {
     //que ya esta abiert
     connect() {
 
-        //connection es una variable estatica
-
+        //connection no la estamos declarando dentro de la clase por lo tanto esta fucnionando como  una variable estatica
+        //creamos una nueva conecion si no hay una abierta
         if (!MongoLib.connection) {
             MongoLib.connection = new Promise((resolve, reject) => {
                 this.client.connect(err => {

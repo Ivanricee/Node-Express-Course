@@ -1,3 +1,11 @@
+------------------test para nuestras rutas
+
+#Los test son muy importantes hacerlso en el codigo
+porque nos asegura que si en eun futuro hacen cambios, el codigo no se rompa
+
+#Es uan buena manera de asegurar que nuestro codigo tiene calidad
+y que si en el futuro hay cambios no se va a romper nuestro code
+
 # test para nuestros endpoint
 # dash dev -> es para modo desarrollo
 # los test no se corren cuando estemos en produccion
@@ -15,7 +23,7 @@ utils/mocks/movies.js
 # crear test server:
 # es un erver que su unica mision sera levantar un server para pruebas
 # corren independiente a un server original
-utils*testServer.js
+utils/testServer.js
 
 # creamos test en test/routes.movies.test.js
 # configuramos un script donde podamos correr los test
@@ -26,9 +34,15 @@ utils*testServer.js
     "test": "mocha --exit"
 ######################### Test a los servicios ---------------------------
 
-
+Los servicios se testean de lo que va a devolver y no las librerias 
+que llama (bases de datos, apis etc)
+Por lo que hay que mockear la libreria de mongo
 
 
 ############################ CAPA DE MANEJO DE CACHE ##################
 //CREAR RCHIVO
 utils/time.js
+
+este se ejecutara si no estamos en modo de desarrollo para que veamos los cambios constantemente
+y schemas/cacheResponse.js
+

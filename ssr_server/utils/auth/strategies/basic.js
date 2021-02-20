@@ -5,6 +5,7 @@ const boom = require('@hapi/boom')
 const axios = require("axios")
 const {config} = require('../../../config/index')
 
+//Muy parecido a como lo consumimos en movies-api
 passport.use(
     new BasicStrategy(async function(email,password,cb){
         try{

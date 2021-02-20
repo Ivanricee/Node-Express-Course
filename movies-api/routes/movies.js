@@ -89,6 +89,7 @@ function moviesApi(app) {
     router.get('/:movieId', 
     passport.authenticate('jwt', {session: false}), 
     scopesValidationHandler(['read:movies']),
+    //el parametro "movieId" va a tener un esquema "movieIdSchema" y lo va a obtener de 'params'
     validationHandler({ movieId: movieIdSchema }, 'params'), async function (req, res, next) {
         
         //############## Agregamos cache
@@ -109,6 +110,7 @@ function moviesApi(app) {
     router.post('/',  
     passport.authenticate('jwt', {session: false}) ,
     scopesValidationHandler(['create:movies']),
+    //usa el schema createMovieSchema pra validar los datos que vienen por defecto en el body
     validationHandler(createMovieSchema), async function (req, res, next) {
         const { body: movie } = req
         try {
@@ -125,6 +127,9 @@ function moviesApi(app) {
     router.put('/:movieId',  
     passport.authenticate('jwt', {session: false}),
     scopesValidationHandler(['update:movies']),
+    //usa dos middleware de validation handler
+    //uno para validar los datos que viene por defecto en el body
+    //otro para validar la id  que viene de params
     validationHandler(updatedMovieId), validationHandler({ movieId: movieIdSchema }, 'params'), async function (req, res, next) {
         const { movieId } = req.params
         const { body: movie } = req

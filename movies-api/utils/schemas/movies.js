@@ -3,7 +3,7 @@ const joi = require('@hapi/joi')
 //join nos ayuda a validar pero tambien a especificar los eschemas
 //los ids tinen cierta extructura por lo cual es una excelente 
 //manera de vlidarlos mediante un regex
-const movieIdSchema = joi.string().regex(/^[0-9a-fA-F]{24}$/);
+const movieIdSchema = joi.string().regex(/^[0-9a-fA-F-]{36}$/);
 const movieTitleSchema = joi.string().max(80);
 const movieYearSchema = joi
   .number()

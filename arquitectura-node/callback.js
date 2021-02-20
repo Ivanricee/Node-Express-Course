@@ -3,7 +3,7 @@
 const asyncCallback = function (cb) {
     setTimeout(() => {
         if (Math.random() < 0.5) {
-            //error first callback
+            //en node tiene un concepto: js error first callback
             //cuando un callback tiene un error se envia 
             //como primer parametro el error
             //si no hay error se envia un null

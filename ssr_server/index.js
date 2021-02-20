@@ -2,6 +2,9 @@ const express = require("express");
 const passport = require('passport')
 const boom = require('@hapi/boom')
 const cookieParser = require('cookie-parser')
+//ofece seguridad
+const helmet = require('helmet')
+const cors = require('cors');
 //nos permite hacer un reques a la api
 const axios = require('axios')
 const { config } = require("./config");
@@ -20,6 +23,18 @@ app.use(express.json());
 app.use(cookieParser())
 
 
+if (config.dev === false) {
+  console.log(`Loading ${config.dev} config`)
+  app.use(helmet())
+  app.use(helmet.permittedCrossDomainPolicies({ permittedPolicies: 'all' }))
+  //Esta configuracion permite desconocer que servidor se esta usando
+  app.disable('x-powered-by')
+}
+app.use(cors({
+    origin: 'http://localhost:3001',
+    credentials: true
+}));
+/*app.use(cors());*/
 // Basic satrategy
 require('./utils/auth/strategies/basic')
 
@@ -40,8 +55,10 @@ app.post("/auth/sign-in", async function(req, res, next) {
         const {token, ...user} = data;
         //definir una cookie en nuestro objeto res
         res.cookie("token", token, {
+        //   domain: 'localhost:3001',
           httpOnly: !config.dev,
-          secure: !config.dev
+          secure: !config.dev,
+          domain: 'ivanricevideo.com'
         })
         //devolvemos el usuario
         //crea la cookie y ahi insertamos el token,
@@ -59,13 +76,18 @@ app.post("/auth/sign-in", async function(req, res, next) {
 
 app.post("/auth/sign-up", async function(req, res, next) {
   const {body:user}= req
+  res.header("Access-Control-Allow-Origin", "*");
   try{
-    await axios({
+    const userData = await axios({
       url: `${config.apiUrl}/api/auth/sign-up`,
       method: "post",
       data: user
     })
-    res.status(201).json({message: "user createded"})
+    res.status(201).json({
+      name: req.body.name,
+      email: req.body.email,
+      id: userData.data.data,
+    })
   }catch(error){
     next(error)
   }
@@ -78,10 +100,13 @@ app.get("/movies", async function(req, res, next) {
 });
 //cuando el usuario en la interfaz grafica agregue o elimine peliculas de su lista
 app.post("/user-movies", async function(req, res, next) {
+
 try{
   const {body: userMovie} = req
   //la cookie esta guardada en las cookies y esta se encuentra en el request obj
-  const {token} = req.cookies;
+  const {token, id} = req.cookies;
+  userMovie.userId = id
+
   const {data, status} = await axios({
     //la url es de nuestro api server
     url: `${config.apiUrl}/api/user-movies`,
@@ -150,5 +175,5 @@ app.get(
 );
 //#####################################
 app.listen(config.port, function() {
-  console.log(`Listening http://localhost:${config.port}`);
+  console.log(`Listening dev: ${config.dev}, at http://localhost:${config.port}`);
 });

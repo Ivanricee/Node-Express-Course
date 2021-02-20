@@ -1,8 +1,11 @@
+//se encarga de verificar si es verdad o no nuestra comparacion de lso test
 const assert = require('assert')
+//cada vez que hagamos un require podamos elegir
+//en vez de que traiga el paquete real traiga un mock
 const proxyquire = require('proxyquire');
 
 
-//los mocks nos ayudan a verificar que esta funcionando correctamente
+//los mocks nos ayudan a verificar que los mocks esten funcionando correctamente
 const { moviesMock, MoviesServiceMock } = require('../utils/mocks/movies.js')
 
 

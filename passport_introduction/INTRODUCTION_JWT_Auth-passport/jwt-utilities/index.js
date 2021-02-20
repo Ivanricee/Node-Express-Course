@@ -15,7 +15,7 @@ function signToken(payload, secret){
 }
 
 function verifyToken(token,screte){
-    return jwt.verify(token, secret)
+    return jwt.verify(token, secret) // retorna el token decodificado
 }
 
 if(option == "sign"){
